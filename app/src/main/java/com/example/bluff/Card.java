@@ -9,6 +9,9 @@ import static com.example.bluff.MainActivity.cards_list;
 class Card {
     private static ArrayList<Integer> cards_deck;
     private int resId;
+    int cardNum;
+    String cardDeck;
+    boolean selected=false;
 
     private void setResId(int resId) {
         this.resId = resId;
@@ -39,37 +42,23 @@ class Card {
         }
 
     }
-    static void initialize(Context ctx){
-        cards_list=new ArrayList<>();
-        cards_deck=new ArrayList<>();
 
-        for(int i=1;i<=13;i++){
-            String card_name="club_" + i;
-            int drawableResourceId = ctx.getResources().getIdentifier(card_name, "drawable", ctx.getPackageName());
-            Card card=new Card();
-            card.setResId(drawableResourceId);
-            cards_list.add(card);
-        }
-        for(int i=1;i<=13;i++){
-            String card_name="heart_" + i;
-            int drawableResourceId = ctx.getResources().getIdentifier(card_name, "drawable", ctx.getPackageName());
-            Card card=new Card();
-            card.setResId(drawableResourceId);
-            cards_list.add(card);
-        }
-        for(int i=1;i<=13;i++){
-            String card_name="spade_" + i;
-            int drawableResourceId = ctx.getResources().getIdentifier(card_name, "drawable", ctx.getPackageName());
-            Card card=new Card();
-            card.setResId(drawableResourceId);
-            cards_list.add(card);
-        }
-        for(int i=1;i<=13;i++){
-            String card_name="diamond_" + i;
-            int drawableResourceId = ctx.getResources().getIdentifier(card_name, "drawable", ctx.getPackageName());
-            Card card=new Card();
-            card.setResId(drawableResourceId);
-            cards_list.add(card);
+    static void initialize(Context ctx) {
+        cards_list = new ArrayList<>();
+        cards_deck = new ArrayList<>();
+
+        String[] deck = {"club", "heart", "spade", "diamond"};
+        for (int i = 0; i < 4; i++) {
+            for (int j = 1; j <= 13; j++) {
+                String card_name = deck[i] + "_" + j;
+                int drawableResourceId = ctx.getResources().getIdentifier(card_name, "drawable", ctx.getPackageName());
+                Card card = new Card();
+                card.setResId(drawableResourceId);
+                card.cardNum = j;
+                card.cardDeck = deck[i];
+                cards_list.add(card);
+            }
         }
     }
+
 }

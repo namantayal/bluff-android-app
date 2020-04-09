@@ -13,11 +13,13 @@ import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,14 +29,42 @@ public class MainActivity extends AppCompatActivity {
     private boolean first=true;
     Player[] players=new Player[4];
     public static ArrayList<Card> cards_list;
+    ArrayList<Integer> selectedCard=new ArrayList<>();
     public int dipToPx(int dip){
         Resources r=getResources();
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,dip,r.getDisplayMetrics());
     }
 
-    public void deleteCard(int cardNum){
-            players[0].player_cards.remove(Integer.valueOf(cardNum));
-            play();
+    public  void removeCard(View view)
+    {
+        players[0].player_cards.removeAll(selectedCard);
+        selectedCard.clear();
+        play();
+    }
+
+    public void selectCard(int cardNum,ImageView view){
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
+            Button removeButton=findViewById(R.id.button2);
+            if(!cards_list.get(cardNum).selected) {
+                if(selectedCard.size()<4) {
+                    params.bottomMargin += dipToPx(30);
+                    selectedCard.add(cardNum);
+                    cards_list.get(cardNum).selected = true;
+                    view.setLayoutParams(params);
+                }
+                else
+                    Toast.makeText(this,"Can't Select more than 4",Toast.LENGTH_SHORT).show();
+            }
+            else{
+                params.bottomMargin-=dipToPx(30);
+                selectedCard.remove(Integer.valueOf(cardNum));
+                cards_list.get(cardNum).selected = false;
+                view.setLayoutParams(params);
+            }
+            if(selectedCard.isEmpty())
+                removeButton.setVisibility(View.GONE);
+            else
+                removeButton.setVisibility(View.VISIBLE);
     }
 
     public void test(View view){
@@ -54,20 +84,7 @@ public class MainActivity extends AppCompatActivity {
         card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                v.animate().translationY(-100f).setDuration(600);
-                v.animate().alpha(0f).setDuration(600);
-                new CountDownTimer(600,1){
-
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        deleteCard(Integer.parseInt(v.getTag().toString()));
-                    }
-                }.start();
+                selectCard(Integer.parseInt(v.getTag().toString()),(ImageView)v);
             }
         });
         if(first) {
