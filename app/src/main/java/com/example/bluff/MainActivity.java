@@ -3,33 +3,33 @@ package com.example.bluff;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.DialogInterface;
+
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.CountDownTimer;
+
 import android.util.TypedValue;
-import android.view.GestureDetector;
-import android.view.ViewGroup;
+
+import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+
 
 public class MainActivity extends AppCompatActivity {
     private boolean first=true;
     Player[] players=new Player[4];
-    public static ArrayList<Card> cards_list;
+    public static ArrayList<Card> cards_detail;
     ArrayList<Integer> selectedCard=new ArrayList<>();
+    CenterTable centerTable;
+
     public int dipToPx(int dip){
         Resources r=getResources();
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,dip,r.getDisplayMetrics());
@@ -37,6 +37,24 @@ public class MainActivity extends AppCompatActivity {
 
     public  void removeCard(View view)
     {
+        Button playCardsButton=findViewById(R.id.playCards);
+        playCardsButton.setVisibility(View.GONE);
+        FrameLayout centerTableLayout=findViewById(R.id.centerTable);
+        //centerTableLayout.removeAllViews();
+        FrameLayout.LayoutParams params=new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT);
+        params.gravity= Gravity.CENTER;
+        for(int i=0;i<selectedCard.size();i++) {
+            ImageView cardBack = new ImageView(this);
+            cardBack.setImageResource(R.drawable.green_back);
+            cardBack.setMaxHeight(dipToPx(110));
+            cardBack.setAdjustViewBounds(true);
+            centerTable.cardsOnTable.addAll(selectedCard);
+            cardBack.setRotation(centerTable.getCardRotation());
+            centerTableLayout.addView(cardBack,0,params);
+            centerTableLayout.bringChildToFront(cardBack);
+        }
         players[0].player_cards.removeAll(selectedCard);
         selectedCard.clear();
         play();
@@ -44,12 +62,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void selectCard(int cardNum,ImageView view){
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
-            Button removeButton=findViewById(R.id.button2);
-            if(!cards_list.get(cardNum).selected) {
+            Button removeButton=findViewById(R.id.playCards);
+            if(!cards_detail.get(cardNum).selected) {
                 if(selectedCard.size()<4) {
                     params.bottomMargin += dipToPx(30);
                     selectedCard.add(cardNum);
-                    cards_list.get(cardNum).selected = true;
+                    cards_detail.get(cardNum).selected = true;
                     view.setLayoutParams(params);
                 }
                 else
@@ -58,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
             else{
                 params.bottomMargin-=dipToPx(30);
                 selectedCard.remove(Integer.valueOf(cardNum));
-                cards_list.get(cardNum).selected = false;
+                cards_detail.get(cardNum).selected = false;
                 view.setLayoutParams(params);
             }
             if(selectedCard.isEmpty())
@@ -68,17 +86,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void test(View view){
+        view.setVisibility(View.GONE);
         play();
     }
 
-    public void addCard(int cardNum, int top_margin){
+    public void addCard(int cardNum, int bottom_margin){
         LinearLayout cardLayout=findViewById(R.id.linearLayout);
         LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
         ImageView card=new ImageView(this);
         card.setMaxHeight(dipToPx(105));
         card.setAdjustViewBounds(true);
-        int resId=cards_list.get(cardNum).getResId();
+        int resId=cards_detail.get(cardNum).getResId();
         card.setImageResource(resId);
         card.setTag(cardNum);
         card.setOnClickListener(new View.OnClickListener() {
@@ -88,14 +107,32 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         if(first) {
-            params.setMargins(0, 0, 0, dipToPx(-30));
+            params.bottomMargin=dipToPx(-30);
             first=false;
         }
-        else
-            params.setMargins(dipToPx(-38), 0, 0, dipToPx(top_margin));
-
-
+        else {
+            params.leftMargin=dipToPx(-38);
+            params.bottomMargin=dipToPx(bottom_margin);
+        }
         cardLayout.addView(card,params);
+    }
+
+    public void play(){
+        LinearLayout cardLayout=findViewById(R.id.linearLayout);
+        cardLayout.removeAllViews();
+        first=true;
+        int bottom_margin=-29;
+        int num_cards=players[0].player_cards.size();
+
+        for(int i=0;i<num_cards;i++){
+            int card_num=players[0].player_cards.get(i);
+            if(i<=num_cards/2)
+                bottom_margin+=1;
+            else
+                bottom_margin-=1;
+            addCard(card_num,bottom_margin);
+        }
+
         int count=cardLayout.getChildCount();
         float tilt= (float) ((count/2)*(-1.1));
         for(int i=0;i<count;i++){
@@ -104,22 +141,6 @@ public class MainActivity extends AppCompatActivity {
             tilt+=1.1;
         }
 
-    }
-
-    public void play(){
-        LinearLayout cardLayout=findViewById(R.id.linearLayout);
-        cardLayout.removeAllViews();
-        first=true;
-        int top_margin=-29;
-        int num_cards=players[0].player_cards.size();
-        for(int i=0;i<num_cards;i++){
-            int card_num=players[0].player_cards.get(i);
-            if(i<=num_cards/2)
-                top_margin+=1;
-            else
-                top_margin-=1;
-            addCard(card_num,top_margin);
-        }
     }
 
     @SuppressLint("SourceLockedOrientationActivity")
@@ -132,6 +153,9 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         Player.numOfPlayer=4;
+        cards_detail = new ArrayList<>();
+        centerTable = new CenterTable();
+
         for(int i=0;i<Player.numOfPlayer;i++){
             players[i]=new Player();
         }

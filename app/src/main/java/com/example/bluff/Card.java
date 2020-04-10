@@ -4,7 +4,7 @@ import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import static com.example.bluff.MainActivity.cards_list;
+import static com.example.bluff.MainActivity.cards_detail;
 
 class Card {
     private static ArrayList<Integer> cards_deck;
@@ -44,7 +44,6 @@ class Card {
     }
 
     static void initialize(Context ctx) {
-        cards_list = new ArrayList<>();
         cards_deck = new ArrayList<>();
 
         String[] deck = {"club", "heart", "spade", "diamond"};
@@ -56,7 +55,7 @@ class Card {
                 card.setResId(drawableResourceId);
                 card.cardNum = j;
                 card.cardDeck = deck[i];
-                cards_list.add(card);
+                cards_detail.add(card);
             }
         }
     }
