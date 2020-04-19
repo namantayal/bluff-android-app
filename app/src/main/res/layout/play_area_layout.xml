@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Play4">
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srcCompat="@drawable/playbg"
+        android:scaleType="centerCrop" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="test"
+        android:text="Play"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.499"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/playerButtons"
+        android:layout_width="100dp"
+        android:layout_height="166dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toEndOf="@id/centerTable"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="80dp">
+
+        <Button
+            android:id="@+id/passButton"
+            android:textSize="12sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="pass"
+            android:text="Pass" />
+
+        <Button
+            android:id="@+id/checkButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Check"
+            android:onClick="check"
+            android:textSize="10sp" />
+
+        <Button
+            android:id="@+id/playCards"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:onClick="playCards"
+            android:text="Play Cards"
+            android:layout_marginTop="10dp"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/centerTable"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:gravity="center"
+        android:paddingStart="10dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:id="@+id/claimSetLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="@id/centerTable"
+        app:layout_constraintBottom_toBottomOf="@id/centerTable"
+        app:layout_constraintEnd_toStartOf="@id/centerTable">
+
+
+
+        <TextView
+            android:id="@+id/currentClaimHead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Current Claim"
+            android:textSize="20sp"
+            android:textColor="#3DC4F3"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/currentClaimText"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:text=""
+            android:textColor="#3DC4F3"
+            android:gravity="center"
+            android:textSize="50sp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/numbers"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:tag="0"
+                android:textColor="@color/numberColor"
+                android:background="@color/numberBgColor"
+                android:alpha="0.8"
+                android:id="@+id/textView"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:onClick="claimCall"
+                android:text="A"
+                android:textStyle="bold"
+                android:textSize="30sp"
+                android:gravity="center" />
+
+            <TextView
+                android:tag="1"
+                android:textColor="@color/numberColor"
+                android:background="@color/numberBgColor"
+                android:alpha="0.8"
+                android:id="@+id/textView2"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:onClick="claimCall"
+                android:text="2"
+                android:layout_marginStart="10dp"
+                android:textStyle="bold"
+                android:textSize="30sp"
+                android:gravity="center" />
+
+            <TextView
+                android:tag="2"
+                android:textColor="@color/numberColor"
+                android:background="@color/numberBgColor"
+                android:alpha="0.8"
+                android:id="@+id/textView3"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:onClick="claimCall"
+                android:text="3"
+                android:layout_marginStart="10dp"
+                android:textStyle="bold"
+                android:textSize="30sp"
+                android:gravity="center" />
+
+            <TextView
+                android:tag="3"
+                android:textColor="@color/numberColor"
+                android:background="@color/numberBgColor"
+                android:alpha="0.8"
+                android:id="@+id/textView4"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:onClick="claimCall"
+                android:text="4"
+                android:layout_marginStart="10dp"
+                android:textStyle="bold"
+                android:textSize="30sp"
+                android:gravity="center" />
+
+            <TextView
+                android:tag="4"
+                android:textColor="@color/numberColor"
+                android:background="@color/numberBgColor"
+                android:alpha="0.8"
+                android:id="@+id/textView5"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:onClick="claimCall"
+                android:text="5"
+                android:layout_marginStart="10dp"
+                android:textStyle="bold"
+                android:textSize="30sp"
+                android:gravity="center" />
+
+            <TextView
+                android:tag="5"
+                android:textColor="@color/numberColor"
+                android:background="@color/numberBgColor"
+                android:alpha="0.8"
+                android:id="@+id/textView6"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:onClick="claimCall"
+                android:text="6"
+                android:layout_marginStart="10dp"
+                android:textStyle="bold"
+                android:textSize="30sp"
+                android:gravity="center" />
+
+            <TextView
+                android:tag="6"
+                android:textColor="@color/numberColor"
+                android:background="@color/numberBgColor"
+                android:alpha="0.8"
+                android:id="@+id/textView7"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:onClick="claimCall"
+                android:text="7"
+                android:layout_marginStart="10dp"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="15dp"
+            android:gravity="center">
+
+            <TextView
+                android:tag="7"
+                android:textColor="@color/numberColor"
+                android:background="@color/numberBgColor"
+                android:alpha="0.8"
+                android:id="@+id/textView8"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:onClick="claimCall"
+                android:text="8"
+                android:layout_marginStart="10dp"
+                android:textStyle="bold"
+                android:textSize="30sp"
+                android:gravity="center"/>
+
+            <TextView
+                android:tag="8"
+                android:textColor="@color/numberColor"
+                android:background="@color/numberBgColor"
+                android:alpha="0.8"
+                android:id="@+id/textView9"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:onClick="claimCall"
+                android:text="9"
+                android:layout_marginStart="10dp"
+                android:textStyle="bold"
+                android:textSize="30sp"
+                android:gravity="center" />
+
+            <TextView
+                android:tag="9"
+                android:textColor="@color/numberColor"
+                android:background="@color/numberBgColor"
+                android:alpha="0.8"
+                android:id="@+id/textView10"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:onClick="claimCall"
+                android:text="10"
+                android:layout_marginStart="10dp"
+                android:textStyle="bold"
+                android:textSize="30sp"
+                android:gravity="center" />
+
+            <TextView
+                android:tag="10"
+                android:textColor="@color/numberColor"
+                android:background="@color/numberBgColor"
+                android:alpha="0.8"
+                android:id="@+id/textView11"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:onClick="claimCall"
+                android:text="J"
+                android:layout_marginStart="10dp"
+                android:textStyle="bold"
+                android:textSize="30sp"
+                android:gravity="center" />
+
+            <TextView
+                android:tag="11"
+                android:textColor="@color/numberColor"
+                android:background="@color/numberBgColor"
+                android:alpha="0.8"
+                android:id="@+id/textView12"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:onClick="claimCall"
+                android:text="Q"
+                android:layout_marginStart="10dp"
+                android:textStyle="bold"
+                android:textSize="30sp"
+                android:gravity="center" />
+
+            <TextView
+                android:tag="12"
+                android:background="@color/numberBgColor"
+                android:alpha="0.8"
+                android:textColor="@color/numberColor"
+                android:id="@+id/textView13"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:onClick="claimCall"
+                android:text="K"
+                android:layout_marginStart="10dp"
+                android:textStyle="bold"
+                android:textSize="30sp"
+                android:gravity="center" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="60dp"
+        app:layout_constraintStart_toStartOf="@id/centerTable"
+        app:layout_constraintEnd_toEndOf="@id/centerTable"
+        android:id="@+id/turn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
