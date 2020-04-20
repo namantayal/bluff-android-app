@@ -32,21 +32,21 @@ public class Play4 extends AppCompatActivity {
         @Override
         public void run() {
             int chance=centerTable.nextPlayerId;
-            if(centerTable.nextPlayerId==Bot.noOfBots){
-                handler.removeCallbacks(this);
-                play();
-            }
-            else {
-                if(!centerTable.isWin()) {
-                    bots[chance].play();
-                    centerTable.nextPlayerId+=1;
+            if(chance!=Bot.noOfBots && !centerTable.isWin()) {
+                bots[chance].play();
+                if(centerTable.nextPlayerId!=Bot.noOfBots) {
+                    centerTable.nextPlayerId += 1;
                     centerTable.showTurn();
                     handler.postDelayed(this, 3000);
                 }
-                else {
+                else{
                     handler.removeCallbacks(this);
                     play();
                 }
+            }
+            else {
+                handler.removeCallbacks(this);
+                play();
             }
         }
     };
@@ -71,6 +71,7 @@ public class Play4 extends AppCompatActivity {
         else{
             centerTable.displayCards(player.selectedCards);
             player.selectedCards.clear();
+            centerTable.nextPlayerId=0;
             play();
         }
     }
@@ -81,11 +82,13 @@ public class Play4 extends AppCompatActivity {
             player.pass=true;
         }
         centerTable.checkPassAll();
+        centerTable.nextPlayerId=0;
         play();
     }
 
     public void check(View view){
         centerTable.check();
+        centerTable.nextPlayerId=0;
         play();
     }
 
@@ -97,7 +100,9 @@ public class Play4 extends AppCompatActivity {
         centerTable.displayCards(player.selectedCards);
         player.selectedCards.clear();
         claimLayout.setVisibility(View.GONE);
+        centerTable.nextPlayerId=0;
         play();
+
     }
 
     public void test(View view){
@@ -113,15 +118,11 @@ public class Play4 extends AppCompatActivity {
     public void play(){
         if(!centerTable.isWin()) {
             int turn = centerTable.nextPlayerId;
-            TextView turnView=findViewById(R.id.turn);
             if (turn == Bot.noOfBots) {
                 player.setClickCards(true);
-                centerTable.nextPlayerId=0;
                 centerTable.showTurn();
             }
             else{
-                centerTable.nextPlayerId+=1;
-                centerTable.showTurn();
                 centerTable.showTurn();
                 player.setClickCards(false);
                 handler.postDelayed(botPlay, 3000);

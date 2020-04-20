@@ -49,6 +49,10 @@ class CenterTable {
     }
 
     void displayCards(ArrayList<Integer> cards){
+        TextView playDetail=mainActivity.findViewById(R.id.playDetail);
+        playDetail.setText("Play - "+cards.size());
+        playDetail.setAlpha(0f);
+        playDetail.animate().alpha(1f).setDuration(100).setStartDelay(50);
         lastPlayedCards.clear();
         lastPlayedCards.addAll(cards);
         cardsOnTable.addAll(cards);
@@ -89,10 +93,10 @@ class CenterTable {
     }
 
     void check(){
-        boolean flag=true;
+        boolean checkFail=true;
         for(int i=0;i<lastPlayedCards.size();i++){
             if((lastPlayedCards.get(i)%13)!=claimNumber){
-                flag=false;
+                checkFail=false;
                 if(lastPlayerId==Bot.noOfBots){
                     player.playerCards.addAll(cardsOnTable);
                     player.displayCards(cardsOnTable);
@@ -103,15 +107,15 @@ class CenterTable {
                 break;
             }
         }
-        if(flag){
-            if(nextPlayerId==0){
+        if(checkFail){
+            if(nextPlayerId==Bot.noOfBots){
                 player.playerCards.addAll(cardsOnTable);
                 player.displayCards(cardsOnTable);
             }
             else{
-                bots[nextPlayerId-1].botCards.addAll(cardsOnTable);
+                bots[nextPlayerId].botCards.addAll(cardsOnTable);
             }
-            nextPlayerId=lastPlayerId;
+            nextPlayerId=lastPlayerId-1;
         }
         reset();
     }
@@ -160,10 +164,12 @@ class CenterTable {
 
     void showTurn(){
         TextView turnView=mainActivity.findViewById(R.id.turn);
-        if(nextPlayerId==0)
+        if(nextPlayerId==Bot.noOfBots)
             turnView.setText("Player Turn");
         else
-            turnView.setText("Bot " +(nextPlayerId)+" Turn");
+            turnView.setText("Bot " +(nextPlayerId+1)+" Turn");
+        turnView.setAlpha(0f);
+        turnView.animate().alpha(1f).setDuration(100).setStartDelay(50);
     }
 
     static void shuffle_distribute(Player player,Bot[] bots) {
