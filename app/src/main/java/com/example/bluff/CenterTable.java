@@ -49,10 +49,6 @@ class CenterTable {
     }
 
     void displayCards(ArrayList<Integer> cards){
-        TextView playDetail=mainActivity.findViewById(R.id.playDetail);
-        playDetail.setText("Play - "+cards.size());
-        playDetail.setAlpha(0f);
-        playDetail.animate().alpha(1f).setDuration(100).setStartDelay(50);
         lastPlayedCards.clear();
         lastPlayedCards.addAll(cards);
         cardsOnTable.addAll(cards);
@@ -62,7 +58,7 @@ class CenterTable {
                 FrameLayout.LayoutParams.WRAP_CONTENT);
         params.gravity= Gravity.CENTER;
         for(int i=0;i<lastPlayedCards.size();i++) {
-            int delay =(i+1)*300;
+            int delay =(i)*300;
             ImageView cardBack = new ImageView(mainActivity.getApplicationContext());
             cardBack.setImageResource(R.drawable.green_back);
             cardBack.setMaxHeight(dipToPx(100));
@@ -104,18 +100,22 @@ class CenterTable {
                 else{
                     bots[lastPlayerId].botCards.addAll(cardsOnTable);
                 }
+                if(nextPlayerId!=0)
+                    nextPlayerId-=1;
+                showTurn();
                 break;
             }
         }
         if(checkFail){
-            if(nextPlayerId==Bot.noOfBots){
+            if(nextPlayerId==0){
                 player.playerCards.addAll(cardsOnTable);
                 player.displayCards(cardsOnTable);
             }
             else{
-                bots[nextPlayerId].botCards.addAll(cardsOnTable);
+                bots[nextPlayerId-1].botCards.addAll(cardsOnTable);
             }
-            nextPlayerId=lastPlayerId-1;
+            nextPlayerId=lastPlayerId;
+            showTurn();
         }
         reset();
     }
@@ -169,7 +169,7 @@ class CenterTable {
         else
             turnView.setText("Bot " +(nextPlayerId+1)+" Turn");
         turnView.setAlpha(0f);
-        turnView.animate().alpha(1f).setDuration(100).setStartDelay(50);
+        turnView.animate().alpha(1f).setDuration(120).setStartDelay((lastPlayedCards.size()*300)+150);
     }
 
     static void shuffle_distribute(Player player,Bot[] bots) {

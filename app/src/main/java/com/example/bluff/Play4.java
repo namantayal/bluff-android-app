@@ -33,16 +33,10 @@ public class Play4 extends AppCompatActivity {
         public void run() {
             int chance=centerTable.nextPlayerId;
             if(chance!=Bot.noOfBots && !centerTable.isWin()) {
+                centerTable.nextPlayerId += 1;
+                centerTable.showTurn();
                 bots[chance].play();
-                if(centerTable.nextPlayerId!=Bot.noOfBots) {
-                    centerTable.nextPlayerId += 1;
-                    centerTable.showTurn();
-                    handler.postDelayed(this, 3000);
-                }
-                else{
-                    handler.removeCallbacks(this);
-                    play();
-                }
+                handler.postDelayed(this,3000);
             }
             else {
                 handler.removeCallbacks(this);
@@ -50,6 +44,18 @@ public class Play4 extends AppCompatActivity {
             }
         }
     };
+
+    public void claimCall(View view){
+        LinearLayout claimLayout=findViewById(R.id.numbers);
+        TextView claimByUser=(TextView) view;
+        int cardNum=Integer.parseInt(claimByUser.getTag().toString());
+        centerTable.setClaimNumber(cardNum);
+        centerTable.displayCards(player.selectedCards);
+        player.selectedCards.clear();
+        claimLayout.setVisibility(View.GONE);
+        play();
+
+    }
 
     public  void playCards(View view) {
         centerTable.lastPlayerId=Bot.noOfBots;
@@ -71,7 +77,6 @@ public class Play4 extends AppCompatActivity {
         else{
             centerTable.displayCards(player.selectedCards);
             player.selectedCards.clear();
-            centerTable.nextPlayerId=0;
             play();
         }
     }
@@ -82,27 +87,27 @@ public class Play4 extends AppCompatActivity {
             player.pass=true;
         }
         centerTable.checkPassAll();
-        centerTable.nextPlayerId=0;
         play();
     }
 
     public void check(View view){
         centerTable.check();
-        centerTable.nextPlayerId=0;
         play();
     }
 
-    public void claimCall(View view){
-        LinearLayout claimLayout=findViewById(R.id.numbers);
-        TextView claimByUser=(TextView) view;
-        int cardNum=Integer.parseInt(claimByUser.getTag().toString());
-        centerTable.setClaimNumber(cardNum);
-        centerTable.displayCards(player.selectedCards);
-        player.selectedCards.clear();
-        claimLayout.setVisibility(View.GONE);
-        centerTable.nextPlayerId=0;
-        play();
-
+    public void play(){
+        if(!centerTable.isWin()) {
+            int turn = centerTable.nextPlayerId;
+            if (turn == Bot.noOfBots) {
+                centerTable.nextPlayerId=0;
+                player.setClickCards(true);
+            }
+            else{
+                centerTable.showTurn();
+                player.setClickCards(false);
+                handler.postDelayed(botPlay, 3000);
+            }
+        }
     }
 
     public void test(View view){
@@ -112,22 +117,8 @@ public class Play4 extends AppCompatActivity {
         player.animateCards();
         claimShowLayout.setVisibility(View.VISIBLE);
         centerTable.nextPlayerId=Bot.noOfBots;
+        centerTable.showTurn();
         play();
-    }
-
-    public void play(){
-        if(!centerTable.isWin()) {
-            int turn = centerTable.nextPlayerId;
-            if (turn == Bot.noOfBots) {
-                player.setClickCards(true);
-                centerTable.showTurn();
-            }
-            else{
-                centerTable.showTurn();
-                player.setClickCards(false);
-                handler.postDelayed(botPlay, 3000);
-            }
-        }
     }
 
     @SuppressLint("SourceLockedOrientationActivity")
